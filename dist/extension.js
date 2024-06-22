@@ -5,6 +5,7 @@
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+// export function activate(context: vscode.ExtensionContext) {
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -30,8 +31,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.activate = activate;
-const vscode = __importStar(__webpack_require__(1));
-// export function activate(context: vscode.ExtensionContext) {
 // 	// Simple notifications
 // 	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
 // 		vscode.window.showInformationMessage('Info Notification');
@@ -91,27 +90,34 @@ const vscode = __importStar(__webpack_require__(1));
 // 	});
 // 	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
 // }
+const vscode = __importStar(__webpack_require__(1));
 let personName = 'ラッコさん';
+let errorTimer;
+const ERROR_DELAY = 5000; // 10s in milliseconds
+const ERROR_CHECK_INTERVAL = 10000; // 1 minute in milliseconds
 function activate(context) {
-    // 助けを呼ぶボタン
+    // Register "Need Help?" notification command
     let needHelpNotif = vscode.commands.registerCommand('extension.needHelpNotif', () => {
         vscode.window.showInformationMessage('エラーが解決されてないようです。助けを呼びますか？', '助けを呼ぶ').then(selection => {
             if (selection === '助けを呼ぶ') {
-                vscode.window.showInformationMessage(`${personName}がお助けします！`);
+                vscode.window.showInformationMessage(`お助け申請しました！`);
             }
         });
     });
-    // エラー解決したと表示
+    // Register "Help Response" notification command
+    let helpResponseNotif = vscode.commands.registerCommand('extension.helpResponseNotif', () => {
+        vscode.window.showInformationMessage(`${personName}がお助けします！`);
+    });
+    // Register "Issue Resolved" status bar command
     let issueResolvedSB = vscode.commands.registerCommand('extension.issueResolvedSB', () => {
         const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
         statusBarItem.text = 'エラーが解決されました';
         statusBarItem.show();
         context.subscriptions.push(statusBarItem);
-        setTimeout(() => {
-            statusBarItem.hide();
-        }, 5000); // ５秒後に表示を取り消す
     });
+    // Subscribe commands to the context
     context.subscriptions.push(needHelpNotif);
+    context.subscriptions.push(helpResponseNotif);
     context.subscriptions.push(issueResolvedSB);
 }
 

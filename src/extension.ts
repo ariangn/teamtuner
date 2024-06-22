@@ -1,5 +1,3 @@
-import * as vscode from 'vscode';
-
 // export function activate(context: vscode.ExtensionContext) {
 
 // 	// Simple notifications
@@ -77,33 +75,42 @@ import * as vscode from 'vscode';
 // 	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
 // }
 
+import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+
 let personName: string = 'ラッコさん';
+let errorTimer: NodeJS.Timeout | undefined;
+const ERROR_DELAY = 5000; // 10s in milliseconds
+const ERROR_CHECK_INTERVAL = 10000; // 1 minute in milliseconds
 
 export function activate(context: vscode.ExtensionContext) {
     
-	// 助けを呼ぶボタン
-    let needHelpNotif= vscode.commands.registerCommand('extension.needHelpNotif', () => {
+    // Register "Need Help?" notification command
+    let needHelpNotif = vscode.commands.registerCommand('extension.needHelpNotif', () => {
         vscode.window.showInformationMessage('エラーが解決されてないようです。助けを呼びますか？', '助けを呼ぶ').then(selection => {
             if (selection === '助けを呼ぶ') {
-                vscode.window.showInformationMessage(`${personName}がお助けします！`);
+                vscode.window.showInformationMessage(`お助け申請しました！`);
             }
         });
     });
 
-    // エラー解決したと表示
+    // Register "Help Response" notification command
+    let helpResponseNotif = vscode.commands.registerCommand('extension.helpResponseNotif', () => {
+        vscode.window.showInformationMessage(`${personName}がお助けします！`);
+    });
+
+    // Register "Issue Resolved" status bar command
     let issueResolvedSB = vscode.commands.registerCommand('extension.issueResolvedSB', () => {
         const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
         statusBarItem.text = 'エラーが解決されました';
         statusBarItem.show();
 
         context.subscriptions.push(statusBarItem);
-
-        setTimeout(() => {
-            statusBarItem.hide();
-        }, 5000); // ５秒後に表示を取り消す
     });
 
-
+    // Subscribe commands to the context
     context.subscriptions.push(needHelpNotif);
+    context.subscriptions.push(helpResponseNotif);
     context.subscriptions.push(issueResolvedSB);
 }
