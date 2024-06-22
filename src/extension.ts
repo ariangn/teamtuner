@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import showTest from './test';
 import WebSocket from 'ws';
 import { connect } from 'http2';
-export function activate(context: vscode.ExtensionContext) {
+import showSolved from './solvedButton';
 
+export function activate(context: vscode.ExtensionContext) {
 
 	const onDidChangeDiagnostics = (e: vscode.DiagnosticChangeEvent) => {
 		// エラーがある場合は助けを求めるボタンを表示
@@ -35,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// 助けを求めるボタンが押された際の処理
 	const askForHelp = async () => {
-		vscode.window.showInformationMessage('エラー情報を収集しています...');
+		// vscode.window.showInformationMessage('エラー情報を収集しています...');
 
 		let errorList: ErrorInfo[] = [];
 
@@ -72,11 +73,14 @@ export function activate(context: vscode.ExtensionContext) {
 		if (errorList.length > 0) {
 			// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
 			vscode.window.showInformationMessage(report);
-			vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
+			// vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
 		} else {
 			vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
+			return;
 		}
 
+		const sendMessage: () => void = () => ws.send("解決した");
+		showSolved(sendMessage);
 		sendErrorsToAPI(errorList[0]);
 	};
 
