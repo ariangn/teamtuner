@@ -1,26 +1,78 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "team-tuner" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('team-tuner.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from TeamTuner!');
+	// Simple notifications
+	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
+		vscode.window.showInformationMessage('Info Notification');
 	});
 
-	context.subscriptions.push(disposable);
-}
+	const showInfoNotificationAsModal = vscode.commands.registerCommand('notifications-sample.showInfoAsModal', () => {
+		vscode.window.showInformationMessage('Info Notification As Modal', { modal: true });
+	});
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+	const showWarningNotification = vscode.commands.registerCommand('notifications-sample.showWarning', () => {
+		vscode.window.showWarningMessage('Warning Notification');
+	});
+
+	const showErrorNotification = vscode.commands.registerCommand('notifications-sample.showError', () => {
+		vscode.window.showErrorMessage('Error Notification');
+	});
+
+	// Notification with actions
+	const showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', async () => {
+		const selection = await vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3');
+		
+		if (selection !== undefined) {
+			vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true });
+		}
+		
+	});
+
+	// Progress notification with option to cancel
+	const showProgressNotification = vscode.commands.registerCommand('notifications-sample.showProgress', () => {
+		vscode.window.withProgress({
+			location: vscode.ProgressLocation.Notification,
+			title: "Progress Notification",
+			cancellable: true
+		}, (progress, token) => {
+			token.onCancellationRequested(() => {
+				console.log("User canceled the long running operation");
+			});
+
+			progress.report({ increment: 0 });
+
+			setTimeout(() => {
+				progress.report({ increment: 10, message: "Still going..." });
+			}, 1000);
+
+			setTimeout(() => {
+				progress.report({ increment: 40, message: "Still going even more..." });
+			}, 2000);
+
+			setTimeout(() => {
+				progress.report({ increment: 50, message: "I am long running! - almost there..." });
+			}, 3000);
+
+			const p = new Promise<void>(resolve => {
+				setTimeout(() => {
+					resolve();
+				}, 5000);
+			});
+
+			return p;
+		});
+	});
+
+	// Show all notifications to show do not disturb behavior
+	const showAllNotifications = vscode.commands.registerCommand('notifications-sample.showAll', () => {
+		vscode.commands.executeCommand('notifications-sample.showInfo');
+		vscode.commands.executeCommand('notifications-sample.showWarning');
+		vscode.commands.executeCommand('notifications-sample.showWarningWithActions');
+		vscode.commands.executeCommand('notifications-sample.showError');
+		vscode.commands.executeCommand('notifications-sample.showProgress');
+		vscode.commands.executeCommand('notifications-sample.showInfoAsModal');
+	});
+
+	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
+}
