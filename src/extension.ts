@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import axios from 'axios';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -74,5 +75,19 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('notifications-sample.showInfoAsModal');
 	});
 
-	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
+	const disposable = vscode.commands.registerCommand('extension.sendMessageToDiscord', async () => {
+		try {
+		  const webhookUrl = 'http://localhost:3000/send-message'; // Web APIのエンドポイント
+		  await axios.post(webhookUrl, {
+			channelId: '1066950536361947207',
+			message: 'This is a test message from VSCode'
+		  });
+		  vscode.window.showInformationMessage('Message sent to Discord');
+		} catch (error) {
+		  vscode.window.showErrorMessage('Failed to send message to Discord');
+		}
+	  });
+
+
+	context.subscriptions.push(disposable, showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
 }
