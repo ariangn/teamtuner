@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
-import axios from 'axios';
+import WebSocket from 'ws';
 
 export function activate(context: vscode.ExtensionContext) {
-
 	// Simple notifications
 	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
 		vscode.window.showInformationMessage('Info Notification');
@@ -75,19 +74,20 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('notifications-sample.showInfoAsModal');
 	});
 
-	const disposable = vscode.commands.registerCommand('extension.sendMessageToDiscord', async () => {
-		try {
-		  const webhookUrl = 'http://localhost:3000/send-message'; // Web APIのエンドポイント
-		  await axios.post(webhookUrl, {
-			channelId: '1066950536361947207',
-			message: 'This is a test message from VSCode'
-		  });
-		  vscode.window.showInformationMessage('Message sent to Discord');
-		} catch (error) {
-		  vscode.window.showErrorMessage('Failed to send message to Discord');
-		}
-	  });
+	const ws = new WebSocket('ws://localhost:8080');
 
+	ws.on('open', () => {
+		console.log('Connected to WebSocket server');
+	});
+
+	ws.on('message', (message: string) => {
+		vscode.window.showInformationMessage(`Received from server: ${message}`);
+	});
+
+	const disposable = vscode.commands.registerCommand('extension.sendMessageToWebSocket', () => {
+		ws.send('Hello from VSCode');
+		vscode.window.showInformationMessage('Message sent to WebSocket server');
+	});
 
 	context.subscriptions.push(disposable, showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
 }
