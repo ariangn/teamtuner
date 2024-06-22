@@ -36,7 +36,7 @@ const extensionConfig = {
           {
             loader: 'ts-loader'
           }
-        ]
+        ],
       }
     ]
   },
