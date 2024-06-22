@@ -9,47 +9,47 @@
   "categories": [
     "Other"
   ],
-	"activationEvents": [],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "notifications-sample.showInfo",
-				"title": "Show Info Notification",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showInfoAsModal",
-				"title": "Show Info Notification As Modal",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showWarning",
-				"title": "Show Warning Notification",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showWarningWithActions",
-				"title": "Show Warning Notification With Actions",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showError",
-				"title": "Show Error Notification",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showProgress",
-				"title": "Show Progress Notification",
-				"category": "Notifications Sample"
-			},
-			{
-				"command": "notifications-sample.showAll",
-				"title": "Show All Notifications",
-				"category": "Notifications Sample"
-			}
-		]
-	},
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "notifications-sample.showInfo",
+        "title": "Show Info Notification",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showInfoAsModal",
+        "title": "Show Info Notification As Modal",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showWarning",
+        "title": "Show Warning Notification",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showWarningWithActions",
+        "title": "Show Warning Notification With Actions",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showError",
+        "title": "Show Error Notification",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showProgress",
+        "title": "Show Progress Notification",
+        "category": "Notifications Sample"
+      },
+      {
+        "command": "notifications-sample.showAll",
+        "title": "Show All Notifications",
+        "category": "Notifications Sample"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
@@ -62,17 +62,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.90.0",
     "@types/mocha": "^10.0.6",
-    "@types/node": "20.x",
+    "@types/node": "^20.14.8",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.92.0",
-    "webpack-cli": "^5.1.4",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0"
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.92.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3"
   }
 }
