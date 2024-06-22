@@ -14,6 +14,11 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "notifications-sample.showTest",
+				"title": "Show Test Notification",
+				"category": "Notifications Sample"
+			},
+			{
 				"command": "notifications-sample.showInfo",
 				"title": "Show Info Notification",
 				"category": "Notifications Sample"

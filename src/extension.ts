@@ -1,6 +1,15 @@
 import * as vscode from 'vscode';
-
+import showTest from './test';
 export function activate(context: vscode.ExtensionContext) {
+
+	// let orange = vscode.window.createOutputChannel("Orange");
+
+	const onDidChangeDiagnostics = (e: vscode.DiagnosticChangeEvent) => {
+		vscode.window.showInformationMessage('診断が変更されましたよ！');
+		// orange.appendLine('診断が変更されました');
+	};
+
+	const disposable = vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
 
 	// Simple notifications
 	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
@@ -74,5 +83,5 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('notifications-sample.showInfoAsModal');
 	});
 
-	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications);
+	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions, showAllNotifications, showTest, disposable);
 }
