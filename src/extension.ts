@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import showTest from './test';
-import axios from 'axios';
+import WebSocket from 'ws';
+import { connect } from 'http2';
 export function activate(context: vscode.ExtensionContext) {
 
 
@@ -60,13 +61,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// エラーと警告の情報をまとめる
 		let report = "エラーと警告のレポート:\n\n";
-    
+
 		errorList.forEach(error => {
 			report += `[${error.severity}] ${error.file} (${error.language}):\n`;
 			report += `  Line ${error.line}, Column ${error.column}: ${error.message}\n\n`;
 			report += `  メンバー名: ${error.memberName}さん\n\n`;
 		});
-	
+
 		// レポートを表示または送信
 		if (errorList.length > 0) {
 			// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
@@ -85,29 +86,39 @@ export function activate(context: vscode.ExtensionContext) {
 		message: string;
 	}
 
+	const ws = new WebSocket('ws://localhost:8080');
+
+	ws.on('open', () => {
+		console.log('Connected to WebSocket server');
+	});
+
+	ws.on('message', (message: string) => {
+		const parsedMessage = JSON.parse(message);
+		if (parsedMessage.source === 'discord') {
+		vscode.window.showInformationMessage(`Received from Discord: ${parsedMessage.message}`);
+		}
+	});
+
 	// APIに実際にエラー情報を送信する関数
 	async function sendErrorsToAPI(error: ErrorInfo): Promise<void> {
 		// ここでエラー情報をAPIに送信します
-		const payloads: ErrorPayload = {
-			memberName: error.memberName,
-			language: error.language,
-			message: error.message
-		};
-		
+		// const payloads: ErrorPayload = {
+		// 	memberName: error.memberName,
+		// 	language: error.language,
+		// 	message: error.message
+		// };
+
 		try {
-			const response = await axios.post('http://localhost:3000/send-message', payloads, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			
-		  	} catch (error) {
-				if (axios.isAxiosError(error)) {
-					vscode.window.showErrorMessage('APIエラー:', error.response?.data);
-				} else {
-					vscode.window.showErrorMessage('エラー:', error ?? '原因不明のエラー');
-				}
-			}
+			ws.send(JSON.stringify({ source: 'vscode', memberName: error.memberName, language: error.language, message: error.message }));
+			console.log('send websocket error_message');
+		} catch (error) {
+			// if (axios.isAxiosError(error)) {
+			// 	vscode.window.showErrorMessage('APIエラー:', error.response?.data);
+			// } else {
+			// 	vscode.window.showErrorMessage('エラー:', error ?? '原因不明のエラー');
+			// }
+			vscode.window.showErrorMessage('エラー:', error ?? '原因不明のエラー');
+		}
 	}
 
 	// Simple notifications
@@ -130,11 +141,10 @@ export function activate(context: vscode.ExtensionContext) {
 	// Notification with actions
 	const showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', async () => {
 		const selection = await vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3');
-		
+
 		if (selection !== undefined) {
 			vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true });
 		}
-		
 	});
 
 	// Progress notification with option to cancel
