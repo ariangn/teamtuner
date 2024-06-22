@@ -1,15 +1,114 @@
 import * as vscode from 'vscode';
 import showTest from './test';
+import axios from 'axios';
 export function activate(context: vscode.ExtensionContext) {
 
-	// let orange = vscode.window.createOutputChannel("Orange");
 
 	const onDidChangeDiagnostics = (e: vscode.DiagnosticChangeEvent) => {
-		vscode.window.showInformationMessage('診断が変更されましたよ！');
-		// orange.appendLine('診断が変更されました');
+		// エラーがある場合は助けを求めるボタンを表示
+		showAskForHelpButton();
+
 	};
 
 	const disposable = vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
+
+	// エラーの情報を格納する変数のためのインターフェース
+	interface ErrorInfo {
+		memberName: string;
+		file: string;
+		language: string;
+		line: number;
+		column: number;
+		message: string;
+		severity: 'Error' | 'Warning';
+	}
+
+	// 助けを求めるボタンの表示
+	const showAskForHelpButton = async () => {
+		const selection = await vscode.window.showWarningMessage('TeamTuner: エラーが発生しているようです', '助けを求める');
+		
+		if (selection !== undefined) {
+			askForHelp();
+		}
+	};
+
+	// 助けを求めるボタンが押された際の処理
+	const askForHelp = async () => {
+		vscode.window.showInformationMessage('エラー情報を収集しています...');
+
+		let errorList: ErrorInfo[] = [];
+
+		// ワークスペース内の全てのファイルの診断情報を取得
+		vscode.workspace.textDocuments.forEach(document => {
+			const diagnostics = vscode.languages.getDiagnostics(document.uri);
+			
+			diagnostics.forEach(diagnostic => {
+				if (diagnostic.severity === vscode.DiagnosticSeverity.Error || diagnostic.severity === vscode.DiagnosticSeverity.Warning) {
+					errorList.push({
+						memberName: process.env.USERNAME || 'Unknown',
+						file: document.fileName,
+						language: document.languageId,
+                    	line: diagnostic.range.start.line + 1,
+                    	column: diagnostic.range.start.character + 1,
+                    	message: diagnostic.message,
+                    	severity: diagnostic.severity === vscode.DiagnosticSeverity.Error ? 'Error' : 'Warning'
+					});
+				}
+			});
+
+		});
+
+		// エラーと警告の情報をまとめる
+		let report = "エラーと警告のレポート:\n\n";
+    
+		errorList.forEach(error => {
+			report += `[${error.severity}] ${error.file} (${error.language}):\n`;
+			report += `  Line ${error.line}, Column ${error.column}: ${error.message}\n\n`;
+			report += `  メンバー名: ${error.memberName}さん\n\n`;
+		});
+	
+		// レポートを表示または送信
+		if (errorList.length > 0) {
+			// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
+			vscode.window.showInformationMessage(report);
+			vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
+		} else {
+			vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
+		}
+
+		sendErrorsToAPI(errorList[0]);
+	};
+
+	interface ErrorPayload {
+		memberName: string;
+		language: string;
+		message: string;
+	}
+
+	// APIに実際にエラー情報を送信する関数
+	async function sendErrorsToAPI(error: ErrorInfo): Promise<void> {
+		// ここでエラー情報をAPIに送信します
+		const payloads: ErrorPayload = {
+			memberName: error.memberName,
+			language: error.language,
+			message: error.message
+		};
+		
+		try {
+			const response = await axios.post('http://localhost:3000/send-message', payloads, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			
+		  	} catch (error) {
+				if (axios.isAxiosError(error)) {
+					vscode.window.showErrorMessage('APIエラー:', error.response?.data);
+				} else {
+					vscode.window.showErrorMessage('エラー:', error ?? '原因不明のエラー');
+				}
+			}
+	}
 
 	// Simple notifications
 	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
