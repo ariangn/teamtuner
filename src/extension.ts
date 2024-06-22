@@ -81,11 +81,15 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	ws.on('message', (message: string) => {
-		vscode.window.showInformationMessage(`Received from server: ${message}`);
+		const parsedMessage = JSON.parse(message);
+		if (parsedMessage.source === 'discord') {
+		vscode.window.showInformationMessage(`Received from Discord: ${parsedMessage.message}`);
+		}
 	});
 
-	const disposable = vscode.commands.registerCommand('extension.sendMessageToWebSocket', () => {
-		ws.send('Hello from VSCode');
+	const disposable = vscode.commands.registerCommand('extension.sendMessageToDiscord', () => {
+		const message = 'Hello from VSCode';
+		ws.send(JSON.stringify({ source: 'vscode', message: message }));
 		vscode.window.showInformationMessage('Message sent to WebSocket server');
 	});
 
