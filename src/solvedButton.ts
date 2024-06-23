@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-const showSolved = async () => {
+const showSolved = async (sendSolvedMessage: () => void) => {
     const selection = await vscode.window.showWarningMessage('エラーは解決しましたか？', '解決した！');
     
     if (selection !== undefined) {
@@ -12,6 +12,8 @@ const showSolved = async () => {
 
         const message = lines.join('\n');
         vscode.window.showInformationMessage(message, { modal: true });
+
+        sendSolvedMessage();
     }
 };
 

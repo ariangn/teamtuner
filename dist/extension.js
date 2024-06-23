@@ -36,6 +36,7 @@ exports.activate = activate;
 const vscode = __importStar(__webpack_require__(1));
 const test_1 = __importDefault(__webpack_require__(2));
 const ws_1 = __importDefault(__webpack_require__(3));
+const solvedButton_1 = __importDefault(__webpack_require__(36));
 function activate(context) {
     const onDidChangeDiagnostics = (e) => {
         // エラーがある場合は助けを求めるボタンを表示
@@ -51,7 +52,7 @@ function activate(context) {
     };
     // 助けを求めるボタンが押された際の処理
     const askForHelp = async () => {
-        vscode.window.showInformationMessage('エラー情報を収集しています...');
+        // vscode.window.showInformationMessage('エラー情報を収集しています...');
         let errorList = [];
         // ワークスペース内の全てのファイルの診断情報を取得
         vscode.workspace.textDocuments.forEach(document => {
@@ -59,7 +60,7 @@ function activate(context) {
             diagnostics.forEach(diagnostic => {
                 if (diagnostic.severity === vscode.DiagnosticSeverity.Error || diagnostic.severity === vscode.DiagnosticSeverity.Warning) {
                     errorList.push({
-                        memberName: process.env.USERNAME || 'Unknown',
+                        memberName: 'いとうやまと', //process.env.USERNAME || 'Unknown',
                         file: document.fileName,
                         language: document.languageId,
                         line: diagnostic.range.start.line + 1,
@@ -78,14 +79,16 @@ function activate(context) {
             report += `  メンバー名: ${error.memberName}さん\n\n`;
         });
         // レポートを表示または送信
-        if (errorList.length > 0) {
-            // ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
-            vscode.window.showInformationMessage(report);
-            vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
-        }
-        else {
-            vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
-        }
+        // if (errorList.length > 0) {
+        // 	// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
+        // 	vscode.window.showInformationMessage(report);
+        // 	// vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
+        // } else {
+        // 	vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
+        // 	return;
+        // }
+        const sendMessage = () => ws.send("1");
+        (0, solvedButton_1.default)(sendMessage);
         sendErrorsToAPI(errorList[0]);
     };
     const ws = new ws_1.default('ws://localhost:8080');
@@ -95,7 +98,7 @@ function activate(context) {
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
         if (parsedMessage.source === 'discord') {
-            vscode.window.showInformationMessage(`Received from Discord: ${parsedMessage.message}`);
+            vscode.window.showInformationMessage(`${parsedMessage.message}`);
         }
     });
     // APIに実際にエラー情報を送信する関数
@@ -5424,6 +5427,53 @@ function parse(header) {
 }
 
 module.exports = { parse };
+
+
+/***/ }),
+/* 36 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
+const showSolved = async (sendSolvedMessage) => {
+    const selection = await vscode.window.showWarningMessage('エラーは解決しましたか？', '解決した！');
+    if (selection !== undefined) {
+        const lines = [
+            '問題が解決しました！🥳',
+            '質問者：Soma',
+            '回答者：Ito'
+        ];
+        const message = lines.join('\n');
+        vscode.window.showInformationMessage(message, { modal: true });
+        sendSolvedMessage();
+    }
+};
+exports["default"] = showSolved;
 
 
 /***/ })

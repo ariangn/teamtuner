@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 			diagnostics.forEach(diagnostic => {
 				if (diagnostic.severity === vscode.DiagnosticSeverity.Error || diagnostic.severity === vscode.DiagnosticSeverity.Warning) {
 					errorList.push({
-						memberName: process.env.USERNAME || 'Unknown',
+						memberName: 'いとうやまと', //process.env.USERNAME || 'Unknown',
 						file: document.fileName,
 						language: document.languageId,
                     	line: diagnostic.range.start.line + 1,
@@ -70,16 +70,16 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 
 		// レポートを表示または送信
-		if (errorList.length > 0) {
-			// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
-			vscode.window.showInformationMessage(report);
-			// vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
-		} else {
-			vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
-			return;
-		}
+		// if (errorList.length > 0) {
+		// 	// ここでレポートを使用して何かします（例：APIに送信、ファイルに保存など）
+		// 	vscode.window.showInformationMessage(report);
+		// 	// vscode.window.showInformationMessage(`${errorList.length} 件のエラーと警告の情報を収集しました。`);
+		// } else {
+		// 	vscode.window.showInformationMessage('現在、エラーや警告は検出されていません。');
+		// 	return;
+		// }
 
-		const sendMessage: () => void = () => ws.send("解決した");
+		const sendMessage: () => void = () => ws.send("1");
 		showSolved(sendMessage);
 		sendErrorsToAPI(errorList[0]);
 	};
@@ -99,7 +99,7 @@ export function activate(context: vscode.ExtensionContext) {
 	ws.on('message', (message: string) => {
 		const parsedMessage = JSON.parse(message);
 		if (parsedMessage.source === 'discord') {
-		vscode.window.showInformationMessage(`Received from Discord: ${parsedMessage.message}`);
+		vscode.window.showInformationMessage(`${parsedMessage.message}`);
 		}
 	});
 
