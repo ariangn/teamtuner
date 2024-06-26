@@ -1,71 +1,19 @@
-# team-tuner README
+# RSS Hackathon 2024 Beyond 提出作品「TeamTuner」
 
-This is the README for your extension "team-tuner". After writing up a brief description, we recommend including the following sections.
+レイスシステムソリューションズが開催したハッカソンRSS Hackathon 2024 Beyondにて開発・発表した作品「TeamTuner」のリポジトリです。
+最終的には審査員特別賞を受賞することができました。
 
-## Features
+- [参加レポート](https://zenn.dev/somahc/articles/dd3eee4f9468ba)
+- [プレゼン資料](https://www.canva.com/design/DAGI4jyp298/X81s_6ZBPs4uNsIN2BBFEA/view?utm_content=DAGI4jyp298&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## 概要
+- TeamTunerは社員数が多い規模の大きい会社のエンジニアの生産性を上げることを目的としたVSCodeの拡張機能です
+  - VSCode側でエラーを検知すると、「助けを求める」ボタンを表示し、ワンクリックで助けを求められます
+  - 助けを求めるボタンが押されると、エラーの内容に応じてDiscord Botが適切な人にメンションして通知してくれます
+- 「誰がどの分野が得意か把握できない」「行き詰まってしまったけど、誰に相談すればいいかわからない」と言った問題を解決し、質問→相談→解決までの時間を短縮します
 
-For example if there is an image subfolder under your extension project workspace:
+![TeamTuner動作の様子](https://storage.googleapis.com/zenn-user-upload/a539f37a1aa6-20240626.gif)
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## その他情報
+- 開発体制：4人でのチーム開発
+- 開発期間：１日
