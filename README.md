@@ -1,71 +1,27 @@
-# team-tuner README
+# TeamTuner
+Created for Race System Solutions Hackathon 2024, Tokyo, Japan <br>
+3rd place, Judges' Special Award <br> <br>
+Presentation (in Japanese): <br>
+https://www.canva.com/design/DAGI4jyp298/X81s_6ZBPs4uNsIN2BBFEA/view?utm_content=DAGI4jyp298&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
-This is the README for your extension "team-tuner". After writing up a brief description, we recommend including the following sections.
+## Overview
+Our team developed a VSCode extension / Discord bot called TeamTuner. We focused on addressing issues commonly found in large companies, such as knowing who is knowledgeable in which area and difficulty keeping track of who is having problems where. The motivation behind the development was that if engineers could easily notify other knowledgeable in-house engineers about issues they encounter based on the nature of the error, it would shorten the time spent on the process from asking questions to consultation to resolution, ultimately leading to improved productivity. <br>
 
-## Features
+Time allotted: 1 day <br>
+Total members: 4
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## How it works
 
-For example if there is an image subfolder under your extension project workspace:
+<img src="https://github.com/user-attachments/assets/a67ae5b2-1ca0-4fc7-a9eb-8ec7219f4a2a">
+<br> <br>
+VSCode detects an error  <br>
+↓  <br>
+A "Request Help" button is displayed  <br>
+↓  <br>
+When the button is clicked, a message is automatically created and sent to a dedicated Discord channel, mentioning people who might be able to help, along with the name of the person requesting help and the error message  <br>
+↓  <br>
+Someone who can help reacts to the message, indicating "I'll help." The name of the person who reacted is notified on the VSCode side. <br>
+↓  <br>
+Once the issue is resolved, the person in need can press the "Resolved!" button in VSCode, notifying the Discord channel that the issue has been resolved, and the process is complete.
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
