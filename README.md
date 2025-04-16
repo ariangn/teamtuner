@@ -23,5 +23,3 @@ When the button is clicked, a message is automatically created and sent to a ded
 Someone who can help reacts to the message, indicating "I'll help." The name of the person who reacted is notified on the VSCode side. <br>
 ↓  <br>
 Once the issue is resolved, the person in need can press the "Resolved!" button in VSCode, notifying the Discord channel that the issue has been resolved, and the process is complete.
-
-
