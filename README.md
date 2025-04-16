@@ -1,19 +1,25 @@
-# RSS Hackathon 2024 Beyond 提出作品「TeamTuner」
+# TeamTuner
+Created for Race System Solutions Hackathon 2024, Tokyo, Japan <br>
+3rd place, Judges' Special Award <br> <br>
+Presentation (in Japanese): <br>
+https://www.canva.com/design/DAGI4jyp298/X81s_6ZBPs4uNsIN2BBFEA/view?utm_content=DAGI4jyp298&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
-レイスシステムソリューションズが開催したハッカソンRSS Hackathon 2024 Beyondにて開発・発表した作品「TeamTuner」のリポジトリです。
-最終的には審査員特別賞を受賞することができました。
+## Overview
+Our team developed a VSCode extension / Discord bot called TeamTuner. We focused on addressing issues commonly found in large companies, such as knowing who is knowledgeable in which area and difficulty keeping track of who is having problems where. The motivation behind the development was that if engineers could easily notify other knowledgeable in-house engineers about issues they encounter based on the nature of the error, it would shorten the time spent on the process from asking questions to consultation to resolution, ultimately leading to improved productivity. <br>
 
-- [参加レポート](https://zenn.dev/somahc/articles/dd3eee4f9468ba)
-- [プレゼン資料](https://www.canva.com/design/DAGI4jyp298/X81s_6ZBPs4uNsIN2BBFEA/view?utm_content=DAGI4jyp298&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+Time allotted: 1 day <br>
+Total members: 4
 
-## 概要
-- TeamTunerは社員数が多い規模の大きい会社のエンジニアの生産性を上げることを目的としたVSCodeの拡張機能です
-  - VSCode側でエラーを検知すると、「助けを求める」ボタンを表示し、ワンクリックで助けを求められます
-  - 助けを求めるボタンが押されると、エラーの内容に応じてDiscord Botが適切な人にメンションして通知してくれます
-- 「誰がどの分野が得意か把握できない」「行き詰まってしまったけど、誰に相談すればいいかわからない」と言った問題を解決し、質問→相談→解決までの時間を短縮します
+## How it works
 
-![TeamTuner動作の様子](https://storage.googleapis.com/zenn-user-upload/a539f37a1aa6-20240626.gif)
-
-## その他情報
-- 開発体制：4人でのチーム開発
-- 開発期間：１日
+<img src="https://github.com/user-attachments/assets/a67ae5b2-1ca0-4fc7-a9eb-8ec7219f4a2a">
+<br> <br>
+VSCode detects an error  <br>
+↓  <br>
+A "Request Help" button is displayed  <br>
+↓  <br>
+When the button is clicked, a message is automatically created and sent to a dedicated Discord channel, mentioning people who might be able to help, along with the name of the person requesting help and the error message  <br>
+↓  <br>
+Someone who can help reacts to the message, indicating "I'll help." The name of the person who reacted is notified on the VSCode side. <br>
+↓  <br>
+Once the issue is resolved, the person in need can press the "Resolved!" button in VSCode, notifying the Discord channel that the issue has been resolved, and the process is complete.
